@@ -32,4 +32,10 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("Product not found"));
         return ProductResponse.from(product);
     }
+
+    public void delete(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("Product not found"));
+        productRepository.delete(product);
+    }
 }
