@@ -5,10 +5,7 @@ import com.proud.proudcatorder.dto.ProductResponse;
 import com.proud.proudcatorder.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -20,7 +17,6 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-
 
     @PostMapping
     public ResponseEntity<ProductResponse> create(CreateProductRequest createProductRequest) {
@@ -35,5 +31,10 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProduct() {
         return ResponseEntity.ok(productService.getAll());
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> getById(@PathVariable(name = "productId") Long productId) {
+        return ResponseEntity.ok(productService.getById(productId));
     }
 }

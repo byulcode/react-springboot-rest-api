@@ -13,7 +13,7 @@ public record ProductResponse(
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                product.getCategory().toString(),
+                product.getCategory().getDescription(),
                 product.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
