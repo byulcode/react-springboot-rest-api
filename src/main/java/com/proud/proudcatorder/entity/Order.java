@@ -33,4 +33,10 @@ public class Order extends BaseTimeEntity{
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
+
+    public long calculateTotalPrice() {
+        return orderItems.stream()
+                .mapToLong(OrderItem::getPrice)
+                .sum();
+    }
 }

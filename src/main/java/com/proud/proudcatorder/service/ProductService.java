@@ -1,11 +1,12 @@
 package com.proud.proudcatorder.service;
 
 import com.proud.proudcatorder.dto.CreateProductRequest;
-import com.proud.proudcatorder.dto.ProductResponse;
+import com.proud.proudcatorder.dto.ProductDetailResponse;
 import com.proud.proudcatorder.entity.Product;
 import com.proud.proudcatorder.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,23 +17,27 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductResponse create(CreateProductRequest createProductRequest) {
+    @Transactional
+    public ProductDetailResponse create(CreateProductRequest createProductRequest) {
         Product product = productRepository.save(createProductRequest.toEntity());
-        return ProductResponse.from(product);
+        return ProductDetailResponse.from(product);
     }
 
-    public List<ProductResponse> getAll() {
+    @Transactional(readOnly = true)
+    public List<ProductDetailResponse> getAll() {
         return productRepository.findAll().stream()
-                .map(ProductResponse::from)
+                .map(ProductDetailResponse::from)
                 .toList();
     }
 
-    public ProductResponse getById(Long productId) {
+    @Transactional(readOnly = true)
+    public ProductDetailResponse getById(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product not found"));
-        return ProductResponse.from(product);
+        return ProductDetailResponse.from(product);
     }
 
+    @Transactional
     public void delete(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product not found"));

@@ -1,6 +1,8 @@
 package com.proud.proudcatorder.service;
 
+import com.proud.proudcatorder.dto.OrderDetailResponse;
 import com.proud.proudcatorder.dto.OrderItemRequest;
+import com.proud.proudcatorder.dto.OrderResponse;
 import com.proud.proudcatorder.entity.Order;
 import com.proud.proudcatorder.entity.OrderItem;
 import com.proud.proudcatorder.entity.Product;
@@ -21,15 +23,44 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Long create(List<OrderItemRequest> orderItemRequests) {
+    public Long create(OrderItemRequest orderItemRequest) {
+        Order order = Order.builder().build();
+        Product product = productRepository.findById(orderItemRequest.productId())
+                .orElseThrow(() -> new NoSuchElementException("Product not found"));
+        OrderItem orderItem = orderItemRequest.toEntity(product);
+        orderItem.calculateOrderPrice();
+        order.addOrderItem(orderItem);
+
+        return orderRepository.save(order).getId();
+    }
+
+
+    @Transactional
+    public Long createOrders(List<OrderItemRequest> orderItemRequests) {
         Order order = Order.builder().build();
         for (OrderItemRequest item : orderItemRequests) {
             Product product = productRepository.findById(item.productId())
                     .orElseThrow(() -> new NoSuchElementException("Product not found"));
 
             OrderItem orderItem = item.toEntity(product);
+            orderItem.calculateOrderPrice();
             order.addOrderItem(orderItem);
         }
         return orderRepository.save(order).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getAllOrder() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream()
+                .map(OrderResponse::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDetailResponse getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NoSuchElementException("Order not found"));
+        return OrderDetailResponse.from(order);
     }
 }

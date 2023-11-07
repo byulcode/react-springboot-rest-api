@@ -4,11 +4,11 @@ import com.proud.proudcatorder.entity.Product;
 
 import java.time.format.DateTimeFormatter;
 
-public record ProductResponse(
+public record ProductDetailResponse(
         Long id, String name, String description, long price, String category, String createdAt
 ) {
-    public static ProductResponse from(Product product) {
-        return new ProductResponse(
+    public static ProductDetailResponse from(Product product) {
+        return new ProductDetailResponse(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),

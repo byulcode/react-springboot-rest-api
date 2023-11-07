@@ -26,6 +26,8 @@ public class OrderItem extends BaseTimeEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    @Column(nullable = false)
+    private long price;
 
     @Builder
     public OrderItem(int quantity, Product product, Order order) {
@@ -34,8 +36,8 @@ public class OrderItem extends BaseTimeEntity {
         this.order = order;
     }
 
-    public long calculateOrderPrice() {
-        return this.quantity * this.product.getPrice();
+    public void calculateOrderPrice() {
+        this.price = this.quantity * this.product.getPrice();
     }
 
     public void setOrder(Order order) {
