@@ -7,6 +7,8 @@ import com.proud.proudcatorder.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -16,5 +18,11 @@ public class ProductService {
     public ProductResponse create(CreateProductRequest createProductRequest) {
         Product product = productRepository.save(createProductRequest.toEntity());
         return ProductResponse.from(product);
+    }
+
+    public List<ProductResponse> getAll() {
+        return productRepository.findAll().stream()
+                .map(ProductResponse::from)
+                .toList();
     }
 }
