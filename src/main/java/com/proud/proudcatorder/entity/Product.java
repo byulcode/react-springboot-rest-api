@@ -27,11 +27,19 @@ public class Product extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @Column(name = "image_id", nullable = false)
+    private Long imageId;
+
     @Builder
-    public Product(String name, String description, long price, Category category) {
+    public Product(String name, String description, long price, Category category, Long imageId) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.imageId = imageId;
+    }
+
+    public void addImageId(Long imageId) {
+        this.imageId = imageId;
     }
 }

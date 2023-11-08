@@ -19,7 +19,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-
     @Operation(summary = "상품 단건 주문")
     @PostMapping
     public ResponseEntity<Long> createOrder(@RequestBody OrderItemRequest orderItemRequest) {
