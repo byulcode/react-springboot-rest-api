@@ -2,6 +2,7 @@ package com.proud.proudcatorder.service;
 
 import com.proud.proudcatorder.dto.OrderDetailResponse;
 import com.proud.proudcatorder.dto.OrderItemRequest;
+import com.proud.proudcatorder.dto.OrderRequest;
 import com.proud.proudcatorder.dto.OrderResponse;
 import com.proud.proudcatorder.entity.Order;
 import com.proud.proudcatorder.entity.OrderItem;
@@ -36,12 +37,11 @@ public class OrderService {
 
 
     @Transactional
-    public Long createOrders(List<OrderItemRequest> orderItemRequests) {
-        Order order = Order.builder().build();
-        for (OrderItemRequest item : orderItemRequests) {
+    public Long createOrders(OrderRequest orderRequest) {
+        Order order = orderRequest.toEntity();
+        for (OrderItemRequest item : orderRequest.orderItems()) {
             Product product = productRepository.findById(item.productId())
                     .orElseThrow(() -> new NoSuchElementException("Product not found"));
-
             OrderItem orderItem = item.toEntity(product);
             orderItem.calculateOrderPrice();
             order.addOrderItem(orderItem);

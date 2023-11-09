@@ -1,10 +1,13 @@
 package com.proud.proudcatorder.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +32,10 @@ public class Product extends BaseTimeEntity {
 
     @Column(name = "image_id", nullable = false)
     private Long imageId;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<OrderItem> orderItems;
 
     @Builder
     public Product(String name, String description, long price, Category category, Long imageId) {

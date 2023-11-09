@@ -5,7 +5,7 @@ import com.proud.proudcatorder.entity.Product;
 import java.time.format.DateTimeFormatter;
 
 public record ProductDetailResponse(
-        Long id, String name, String description, long price, String category, String createdAt
+        Long id, String name, String description, long price, String category, String createdAt, Long imageId
 ) {
     public static ProductDetailResponse from(Product product) {
         return new ProductDetailResponse(
@@ -14,7 +14,8 @@ public record ProductDetailResponse(
                 product.getDescription(),
                 product.getPrice(),
                 product.getCategory().getDescription(),
-                product.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                product.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                product.getImageId()
         );
     }
 }

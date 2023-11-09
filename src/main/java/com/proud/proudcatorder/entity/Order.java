@@ -2,14 +2,17 @@ package com.proud.proudcatorder.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "\"order\"")
 public class Order extends BaseTimeEntity{
 
@@ -24,9 +27,21 @@ public class Order extends BaseTimeEntity{
     @JsonIgnore
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private String postcode;
+
     @Builder
-    public Order() {
+    public Order(String email, String address, String postcode) {
         this.orderStatus = OrderStatus.ACCEPTED;
+        this.email = email;
+        this.address = address;
+        this.postcode = postcode;
     }
 
     public void addOrderItem(OrderItem orderItem) {
