@@ -18,12 +18,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/admin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetailResponse> create(
             @RequestPart(value = "createProductRequest") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateProductRequest createProductRequest,
             @RequestPart(value = "image") MultipartFile image) throws IOException {
@@ -41,7 +41,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getById(productId));
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/admin/{productId}")
     public ResponseEntity<Void> delete(@PathVariable(name = "productId") Long productId) {
         productService.delete(productId);
         return ResponseEntity.noContent().build();

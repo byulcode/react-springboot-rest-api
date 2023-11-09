@@ -2,6 +2,7 @@ package com.proud.proudcatorder.controller;
 
 import com.proud.proudcatorder.dto.OrderDetailResponse;
 import com.proud.proudcatorder.dto.OrderItemRequest;
+import com.proud.proudcatorder.dto.OrderRequest;
 import com.proud.proudcatorder.dto.OrderResponse;
 import com.proud.proudcatorder.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -26,10 +27,10 @@ public class OrderController {
         return ResponseEntity.created(URI.create("/orders/" + orderId)).body(orderId);
     }
 
-    @Operation(summary = "장바구니 상품 주문")
-    @PostMapping("/carts")
-    public ResponseEntity<Long> createCartItemOrders(@RequestBody List<OrderItemRequest> orderItemRequests) {
-        Long orderId = orderService.createOrders(orderItemRequests);
+    @Operation(summary = "상품 다건 주문")
+    @PostMapping("/bulk-orders")
+    public ResponseEntity<Long> createCartItemOrders(@RequestBody OrderRequest orderRequest) {
+        Long orderId = orderService.createOrders(orderRequest);
         return ResponseEntity.created(URI.create("/orders/" + orderId)).body(orderId);
     }
 
