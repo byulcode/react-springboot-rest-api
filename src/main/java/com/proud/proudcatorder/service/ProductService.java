@@ -2,6 +2,7 @@ package com.proud.proudcatorder.service;
 
 import com.proud.proudcatorder.dto.CreateProductRequest;
 import com.proud.proudcatorder.dto.ProductDetailResponse;
+import com.proud.proudcatorder.entity.Category;
 import com.proud.proudcatorder.entity.Image;
 import com.proud.proudcatorder.entity.Product;
 import com.proud.proudcatorder.infra.util.ImageUtil;
@@ -10,11 +11,10 @@ import com.proud.proudcatorder.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,8 +35,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDetailResponse> getAll() {
-        return productRepository.findAll().stream()
+    public List<ProductDetailResponse> getProductsByCategory(String category) {
+        Category selectedCategory = StringUtils.hasText(category.toUpperCase()) ? Category.valueOf(category) : null;
+        return productRepository.findByCategory(selectedCategory).stream()
                 .map(ProductDetailResponse::from)
                 .toList();
     }
@@ -53,14 +54,5 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product not found"));
         productRepository.delete(product);
-    }
-
-    @Transactional(readOnly = true)
-    public byte[] downloadImage(Long productImageId) throws Exception {
-        Image image = imageRepository.findById(productImageId)
-                .orElseThrow(() -> new NoSuchElementException("이미지를 찾을 수 없습니다."));
-
-        String filePath = image.getFilePath();
-        return Files.readAllBytes(new File(filePath).toPath());
     }
 }
