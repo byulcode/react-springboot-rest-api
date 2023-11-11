@@ -36,7 +36,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductDetailResponse> getProductsByCategory(String category) {
-        Category selectedCategory = StringUtils.hasText(category.toUpperCase()) ? Category.valueOf(category) : null;
+        Category selectedCategory = StringUtils.hasText(category) ? Category.valueOf(category.toUpperCase()) : null;
         return productRepository.findByCategory(selectedCategory).stream()
                 .map(ProductDetailResponse::from)
                 .toList();
