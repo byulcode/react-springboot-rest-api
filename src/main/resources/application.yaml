@@ -1,12 +1,12 @@
 spring:
   profiles:
-    active: prod
+    active: test
 ---
 
 spring:
   config:
     activate:
-      on-profile: prod
+      on-profile: test
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/proud-cat-order?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -20,3 +20,8 @@ spring:
   output:
     ansi:
       enabled: always
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
